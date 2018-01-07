@@ -1,23 +1,31 @@
 /* ************************************************************************** */
 /*                                                                            */
 /*                                                        :::      ::::::::   */
-/*   ft_strdel.c                                        :+:      :+:    :+:   */
+/*   ft_dstrdup.c                                       :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
 /*   By: gdannay <marvin@42.fr>                     +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
-/*   Created: 2017/11/10 12:38:50 by gdannay           #+#    #+#             */
-/*   Updated: 2018/01/07 15:42:32 by gdannay          ###   ########.fr       */
+/*   Created: 2018/01/07 11:59:17 by gdannay           #+#    #+#             */
+/*   Updated: 2018/01/07 14:49:41 by gdannay          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
-#include <stdlib.h>
-#include <string.h>
+#include "libft.h"
 
-void	ft_strdel(char **as)
+char	**ft_dstrdup(char **str)
 {
-	if (as != NULL)
-	{
-		free(*as);
-		*as = NULL;
-	}
+	int		i;
+	char	**cpy;
+
+	i = 0;
+	cpy = NULL;
+	while (str && str[i])
+		i++;
+	if ((cpy = (char **)malloc(sizeof(char *) * (i + 1))) == NULL)
+		return (NULL);
+	cpy[i] = 0;
+	i = -1;
+	while (str && str[++i])
+		cpy[i] = ft_strdup(str[i]);
+	return (cpy);
 }

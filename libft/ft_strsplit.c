@@ -6,7 +6,7 @@
 /*   By: gdannay <marvin@42.fr>                     +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2017/11/13 09:44:24 by gdannay           #+#    #+#             */
-/*   Updated: 2017/11/14 19:13:06 by gdannay          ###   ########.fr       */
+/*   Updated: 2018/01/07 15:51:20 by gdannay          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -56,8 +56,6 @@ static int		length(char const *s, char **new, char c)
 		else
 			i++;
 	}
-	if ((new[mot] = (char *)malloc(sizeof(char))) == NULL)
-		return (1);
 	return (0);
 }
 

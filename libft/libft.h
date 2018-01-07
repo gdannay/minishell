@@ -6,7 +6,7 @@
 /*   By: gdannay <marvin@42.fr>                     +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2017/11/13 14:37:27 by gdannay           #+#    #+#             */
-/*   Updated: 2018/01/03 19:59:46 by gdannay          ###   ########.fr       */
+/*   Updated: 2018/01/07 12:08:33 by gdannay          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -172,5 +172,7 @@ int						add_char_right(char *buff, char c,
 						int index, size_t length);
 int						add_char_left(char *buff, char c,
 						int *index, size_t length);
+char					*ft_joinpath(char *dir, char *name);
+char					**ft_dstrdup(char **str);
 
 #endif

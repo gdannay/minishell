@@ -1,34 +1,33 @@
 /* ************************************************************************** */
 /*                                                                            */
 /*                                                        :::      ::::::::   */
-/*   minishell.h                                        :+:      :+:    :+:   */
+/*   get_next_line.h                                    :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
 /*   By: gdannay <marvin@42.fr>                     +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
-/*   Created: 2018/01/05 13:46:50 by gdannay           #+#    #+#             */
-/*   Updated: 2018/01/07 14:20:56 by gdannay          ###   ########.fr       */
+/*   Created: 2017/11/14 19:30:42 by gdannay           #+#    #+#             */
+/*   Updated: 2018/01/07 12:32:20 by gdannay          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
-#ifndef MINISHELL_H
-# define MINISHELL_H
+#ifndef GET_NEXT_LINE_H
+# define GET_NEXT_LINE_H
 
-# include <string.h>
 # include <unistd.h>
 # include <stdlib.h>
-# include <stdio.h>
+# include <string.h>
+# include <sys/types.h>
+# include <sys/stat.h>
 # include "libft.h"
-# include <dirent.h>
-# include "get_next_line.h"
+# include <fcntl.h>
+# include <string.h>
 
-typedef struct		s_command
+typedef struct		s_lst
 {
-	char			*name;
-	int				(*com)(char **, char ***);
-}					t_command;
+	int				fd;
+	char			*txt;
+	struct s_lst	*next;
+}					t_lst;
 
-int					exec_com(char *input, char ***env);
-int					ft_echo(char **com, char ***env);
-int					ft_cd(char **com, char ***env);
-
+int					get_next_line(const int fd, char **line);
 #endif

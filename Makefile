@@ -6,17 +6,19 @@
 #    By: gdannay <marvin@42.fr>                     +#+  +:+       +#+         #
 #                                                 +#+#+#+#+#+   +#+            #
 #    Created: 2018/01/05 13:24:06 by gdannay           #+#    #+#              #
-#    Updated: 2018/01/05 13:48:12 by gdannay          ###   ########.fr        #
+#    Updated: 2018/01/07 15:11:45 by gdannay          ###   ########.fr        #
 #                                                                              #
 # **************************************************************************** #
 
 NAME	=	minishell
 
-SRCS	=	srcs/minishell.c
+SRCS	=	srcs/minishell.c	\
+			srcs/check_com.c	\
+			srcs/builtins.c
 
 OBJS	=	$(SRCS:.c=.o)
 
-CFLAGS	=	-Wall -Wextra -Werror -I includes -I libft
+CFLAGS	=	-Wall -Wextra -Werror -I ./includes -I ./libft
 
 LFLAGS	=	-L libft -lft
 
