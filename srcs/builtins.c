@@ -6,7 +6,7 @@
 /*   By: gdannay <marvin@42.fr>                     +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2018/01/07 13:06:37 by gdannay           #+#    #+#             */
-/*   Updated: 2018/01/07 16:02:09 by gdannay          ###   ########.fr       */
+/*   Updated: 2018/01/07 17:41:48 by gdannay          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -44,15 +44,16 @@ static int	set_dir(char *path, char ***env, int i, int free)
 	(void)i;
 	pwd = NULL;
 	ret = 0;
-	if ((*env)[i])
-		ft_strdel(&(*env)[i]);
 	if ((pwd = ft_strjoin("PWD=", path)) == NULL
-		|| ((*env)[i] = ft_strdup(pwd)) == NULL
 		|| chdir(path) == -1)
 		ret = 1;
+	if ((*env)[i])
+		ft_strdel(&(*env)[i]);
+		(*env)[i] = pwd;
+	else
+		(*env) = add_env(env, &pwd);
 	if (free)
 		ft_strdel(&path);
-	ft_strdel(&pwd);
 	return (ret);
 }
 

@@ -6,7 +6,7 @@
 #    By: gdannay <marvin@42.fr>                     +#+  +:+       +#+         #
 #                                                 +#+#+#+#+#+   +#+            #
 #    Created: 2018/01/05 13:24:06 by gdannay           #+#    #+#              #
-#    Updated: 2018/01/07 15:11:45 by gdannay          ###   ########.fr        #
+#    Updated: 2018/01/07 17:30:35 by gdannay          ###   ########.fr        #
 #                                                                              #
 # **************************************************************************** #
 
@@ -14,7 +14,9 @@ NAME	=	minishell
 
 SRCS	=	srcs/minishell.c	\
 			srcs/check_com.c	\
-			srcs/builtins.c
+			srcs/manage_env.c	\
+			srcs/builtins.c		\
+			srcs/env_command.c
 
 OBJS	=	$(SRCS:.c=.o)
 

@@ -6,7 +6,7 @@
 /*   By: gdannay <marvin@42.fr>                     +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2018/01/05 13:46:50 by gdannay           #+#    #+#             */
-/*   Updated: 2018/01/07 14:20:56 by gdannay          ###   ########.fr       */
+/*   Updated: 2018/01/07 17:35:59 by gdannay          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -30,5 +30,9 @@ typedef struct		s_command
 int					exec_com(char *input, char ***env);
 int					ft_echo(char **com, char ***env);
 int					ft_cd(char **com, char ***env);
+int					ft_setenv(char **com, char ***env);
+int					ft_unsetenv(char **com, char ***env);
+int					ft_env(char **com, char ***env);
+char				**add_env(char ***env, char **add);
 
 #endif

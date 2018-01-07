@@ -6,7 +6,7 @@
 #    By: gdannay <marvin@42.fr>                     +#+  +:+       +#+         #
 #                                                 +#+#+#+#+#+   +#+            #
 #    Created: 2017/11/07 18:54:36 by gdannay           #+#    #+#              #
-#    Updated: 2018/01/07 12:43:52 by gdannay          ###   ########.fr        #
+#    Updated: 2018/01/07 16:15:58 by gdannay          ###   ########.fr        #
 #                                                                              #
 # **************************************************************************** #
 
@@ -97,7 +97,8 @@ SRCS	=		ft_memset.c		\
 				display_wstr.c	\
 				ft_joinpath.c	\
 				ft_dstrdup.c	\
-				get_next_line.c	
+				get_next_line.c	\
+				ft_joinwchar.c
 
 CC		=		gcc
 

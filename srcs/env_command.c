@@ -1,25 +1,26 @@
 /* ************************************************************************** */
 /*                                                                            */
 /*                                                        :::      ::::::::   */
-/*   ft_strlen.c                                        :+:      :+:    :+:   */
+/*   env_command.c                                      :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
 /*   By: gdannay <marvin@42.fr>                     +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
-/*   Created: 2017/11/09 21:39:57 by gdannay           #+#    #+#             */
-/*   Updated: 2018/01/07 16:51:34 by gdannay          ###   ########.fr       */
+/*   Created: 2018/01/07 17:02:27 by gdannay           #+#    #+#             */
+/*   Updated: 2018/01/07 17:11:51 by gdannay          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
-#include <string.h>
+#include "minishell.h"
 
-size_t	ft_strlen(const char *s)
+int		ft_env(char **com, char ***env)
 {
-	size_t	i;
+	int i;
 
-	i = 0;
-if (s == NULL)
-		return (0);
-	while (s[i] != '\0')
-		i++;
-	return (i);
+	i = -1;
+	if (!(com[1]))
+	{
+		while ((*env)[++i])
+			dprintf(1, "%s\n", (*env)[i]);
+	}
+	return (0);
 }
