@@ -6,7 +6,7 @@
 /*   By: gdannay <marvin@42.fr>                     +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2018/01/07 13:06:37 by gdannay           #+#    #+#             */
-/*   Updated: 2018/01/08 11:24:17 by gdannay          ###   ########.fr       */
+/*   Updated: 2018/01/08 16:37:42 by gdannay          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -16,9 +16,9 @@ int				ft_echo(char **com, char ***env)
 {
 	int i;
 
-	i = 0;
+	i = -1;
 	(void)env;
-	while (com && com[++i])
+	while (com && (*com)[++i])
 	{
 		if (com[i + 1])
 			ft_printf("%s ", com[i]);
@@ -40,8 +40,6 @@ static int		set_dir(char *path, char ***env, int i, int free)
 	char	*pwd;
 	int		ret;
 
-	(void)env;
-	(void)i;
 	pwd = NULL;
 	ret = 0;
 	if ((pwd = ft_strjoin("PWD=", path)) == NULL
@@ -59,7 +57,7 @@ static int		set_dir(char *path, char ***env, int i, int free)
 	return (ret);
 }
 
-static char		*manage_path(char *path, char *name)
+static char		*manage_dir(char *path, char *name)
 {
 	int i;
 	int j;
@@ -91,16 +89,13 @@ int				ft_cd(char **com, char ***env)
 	DIR		*rep;
 
 	i = 0;
-	(void)com;
 	path = NULL;
-	if (!(env) || !(*env))
-		return (1);
-	if (!(com[1]))
+	if (!(env) || !(*env) || !(com[0]))
 		return (0);
 	while ((*env)[i] && ft_strncmp((*env)[i], "PWD", 3))
 		i++;
 	if (getcwd(buff, BUFF_SIZE) == NULL
-			|| (path = manage_path(buff, com[1])) == NULL)
+			|| (path = manage_dir(buff, com[1])) == NULL)
 		return (1);
 	if ((rep = opendir(path)) == NULL)
 		ft_strdel(&path);

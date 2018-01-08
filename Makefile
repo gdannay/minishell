@@ -6,7 +6,7 @@
 #    By: gdannay <marvin@42.fr>                     +#+  +:+       +#+         #
 #                                                 +#+#+#+#+#+   +#+            #
 #    Created: 2018/01/05 13:24:06 by gdannay           #+#    #+#              #
-#    Updated: 2018/01/08 10:04:11 by gdannay          ###   ########.fr        #
+#    Updated: 2018/01/08 16:36:46 by gdannay          ###   ########.fr        #
 #                                                                              #
 # **************************************************************************** #
 
@@ -17,7 +17,8 @@ SRCS	=	srcs/minishell.c	\
 			srcs/manage_env.c	\
 			srcs/builtins.c		\
 			srcs/env_command.c	\
-			srcs/binaries.c
+			srcs/binaries.c		\
+			srcs/manage_path.c
 
 OBJS	=	$(SRCS:.c=.o)
 

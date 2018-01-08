@@ -6,7 +6,7 @@
 /*   By: gdannay <marvin@42.fr>                     +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2017/11/09 19:54:44 by gdannay           #+#    #+#             */
-/*   Updated: 2017/11/13 14:19:38 by gdannay          ###   ########.fr       */
+/*   Updated: 2018/01/08 14:53:50 by gdannay          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -21,6 +21,8 @@ char	*ft_strstr(const char *str, const char *need)
 	i = 0;
 	j = 0;
 	k = 0;
+	if (str == NULL || need == NULL)
+		return (NULL);
 	while (str[i] != '\0')
 	{
 		while (str[i + k] == need[j])

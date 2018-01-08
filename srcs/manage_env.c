@@ -6,7 +6,7 @@
 /*   By: gdannay <marvin@42.fr>                     +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2018/01/07 16:06:30 by gdannay           #+#    #+#             */
-/*   Updated: 2018/01/08 12:45:19 by gdannay          ###   ########.fr       */
+/*   Updated: 2018/01/08 15:26:33 by gdannay          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -18,12 +18,12 @@ char			**add_env(char ***env, char **add)
 	char	**new;
 
 	i = 0;
-	while ((*env)[i])
+	while (env && (*env) && (*env)[i])
 		i++;
 	if ((new = (char **)malloc(sizeof(char *) * (i + 2))) == NULL)
 		return (NULL);
 	i = -1;
-	while ((*env)[++i])
+	while (env && (*env) && (*env)[++i])
 	{
 		new[i] = ft_strdup((*env)[i]);
 		ft_strdel(&(*env)[i]);
@@ -40,13 +40,14 @@ int				ft_setenv(char **com, char ***env)
 	char	*new;
 
 	i = 0;
-	if (!(com[1]))
+	if (!(com[0]))
 		return (ft_env(com, env));
-	while ((*env)[i] && ft_strncmp(com[1], (*env)[i], ft_strlen(com[1])))
+	while (env && (*env) && (*env)[i]
+			&& ft_strncmp(com[0], (*env)[i], ft_strlen(com[0])))
 		i++;
-	if ((new = ft_joinwchar(com[1], com[2], '=')) == NULL)
+	if ((new = ft_joinwchar(com[0], com[1], '=')) == NULL)
 		return (1);
-	if ((*env)[i])
+	if (env && (*env) && (*env)[i])
 	{
 		ft_strdel(&(*env)[i]);
 		(*env)[i] = new;
@@ -88,11 +89,12 @@ int				ft_unsetenv(char **com, char ***env)
 	int		i;
 
 	i = 0;
-	if (!(com[1]))
+	if (!(com[0]))
 		return (ft_env(com, env));
-	while ((*env)[i] && ft_strncmp(com[1], (*env)[i], ft_strlen(com[1])))
+	while (env && (*env) && (*env)[i]
+			&& ft_strncmp(com[0], (*env)[i], ft_strlen(com[0])))
 		i++;
-	if ((*env)[i])
+	if (env && (*env) && (*env)[i])
 		(*env) = del_env(env, i);
 	return (0);
 }
