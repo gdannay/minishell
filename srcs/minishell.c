@@ -6,20 +6,48 @@
 /*   By: gdannay <marvin@42.fr>                     +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2018/01/05 13:29:13 by gdannay           #+#    #+#             */
-/*   Updated: 2018/01/07 16:55:09 by gdannay          ###   ########.fr       */
+/*   Updated: 2018/01/08 13:38:02 by gdannay          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "minishell.h"
 
-int		main(int ac, char **av, char **env)
+void		free_env(char ***env)
+{
+	int i;
+
+	i = -1;
+	if (env && *env)
+	{
+		while ((*env)[++i])
+			ft_strdel(&(*env)[i]);
+		free(env);
+		env = NULL
+	}
+}
+
+static int	loop(char **input, int *exit, char ***env)
+{
+	char **com;
+
+	if ((com = ft_strsplit(input, ' ')) == NULL)
+		return (1);
+	if (input && *input && !(ft_strcmp(*input, "exit")))
+		*exit = 0;
+	else if (input && *input && exec_com(&com, env))
+		return (1);
+	if (*exit)
+		ft_printf("$> ");
+	ft_strdel(input);
+	return (0);
+}
+
+int			main(int ac, char **av, char **env)
 {
 	int		exit;
 	char	**cpy;
 	char	*input;
-	int		i;
 
-	i = -1;
 	(void)ac;
 	(void)av;
 	input = NULL;
@@ -29,17 +57,12 @@ int		main(int ac, char **av, char **env)
 	ft_printf("$> ");
 	while (exit && get_next_line(0, &input))
 	{
-		i = -1;
-		if (input && !(ft_strcmp(input, "exit")))
-			exit = 0;
-		else if (input && exec_com(input, &cpy))
+		if (loop(&input, &exit, &cpy))
 			return (1);
-		if (exit)
-			ft_printf("$> ");
-		ft_strdel(&input);
 	}
 	ft_strdel(&input);
-	if (exit)	
+	free_env(&cpy);
+	if (exit)
 		ft_printf("exit\n");
 	return (0);
 }

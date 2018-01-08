@@ -6,13 +6,13 @@
 /*   By: gdannay <marvin@42.fr>                     +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2018/01/07 13:06:37 by gdannay           #+#    #+#             */
-/*   Updated: 2018/01/07 17:41:48 by gdannay          ###   ########.fr       */
+/*   Updated: 2018/01/08 11:24:17 by gdannay          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "minishell.h"
 
-int		ft_echo(char **com, char ***env)
+int				ft_echo(char **com, char ***env)
 {
 	int i;
 
@@ -28,14 +28,14 @@ int		ft_echo(char **com, char ***env)
 	return (0);
 }
 
-static int	ft_cd_error(char **com)
+static int		ft_cd_error(char **com)
 {
 	ft_printf("minishell: cd: %s: ", com[1]);
-	write(2,"No such file or directory\n", 26);
+	write(2, "No such file or directory\n", 26);
 	return (0);
 }
 
-static int	set_dir(char *path, char ***env, int i, int free)
+static int		set_dir(char *path, char ***env, int i, int free)
 {
 	char	*pwd;
 	int		ret;
@@ -48,8 +48,10 @@ static int	set_dir(char *path, char ***env, int i, int free)
 		|| chdir(path) == -1)
 		ret = 1;
 	if ((*env)[i])
+	{
 		ft_strdel(&(*env)[i]);
 		(*env)[i] = pwd;
+	}
 	else
 		(*env) = add_env(env, &pwd);
 	if (free)
@@ -81,7 +83,7 @@ static char		*manage_path(char *path, char *name)
 	return (ft_joinpath(path, name));
 }
 
-int		ft_cd(char **com, char ***env)
+int				ft_cd(char **com, char ***env)
 {
 	int		i;
 	char	buff[BUFF_SIZE];
@@ -106,6 +108,6 @@ int		ft_cd(char **com, char ***env)
 		return (ft_cd_error(com));
 	if (rep && closedir(rep) == -1)
 		return (1);
-	return (path ? set_dir(path, env, i, 1) : 
+	return (path ? set_dir(path, env, i, 1) :
 				set_dir(buff, env, i, 0));
 }

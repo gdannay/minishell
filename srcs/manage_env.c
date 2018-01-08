@@ -6,13 +6,13 @@
 /*   By: gdannay <marvin@42.fr>                     +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2018/01/07 16:06:30 by gdannay           #+#    #+#             */
-/*   Updated: 2018/01/07 17:35:39 by gdannay          ###   ########.fr       */
+/*   Updated: 2018/01/08 12:45:19 by gdannay          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "minishell.h"
 
-char		**add_env(char ***env, char **add)
+char			**add_env(char ***env, char **add)
 {
 	int		i;
 	char	**new;
@@ -34,7 +34,7 @@ char		**add_env(char ***env, char **add)
 	return (new);
 }
 
-int		ft_setenv(char **com, char ***env)
+int				ft_setenv(char **com, char ***env)
 {
 	int		i;
 	char	*new;
@@ -79,11 +79,11 @@ static char		**del_env(char ***env, int del)
 		ft_strdel(&(*env)[i]);
 	}
 	free(*env);
-	new[j] = 0;;
+	new[j] = 0;
 	return (new);
 }
 
-int		ft_unsetenv(char **com, char ***env)
+int				ft_unsetenv(char **com, char ***env)
 {
 	int		i;
 
