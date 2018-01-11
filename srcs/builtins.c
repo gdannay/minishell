@@ -6,21 +6,44 @@
 /*   By: gdannay <marvin@42.fr>                     +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2018/01/07 13:06:37 by gdannay           #+#    #+#             */
-/*   Updated: 2018/01/08 16:37:42 by gdannay          ###   ########.fr       */
+/*   Updated: 2018/01/11 20:30:59 by gdannay          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "minishell.h"
 
+static int		search_env(char ***env, char *var, size_t length)
+{
+	int	i;
+
+	i = 0;
+	while ((*env)[i] && ft_strncmp((*env)[i], var, length))
+		i++;
+	return (i);
+}
+
 int				ft_echo(char **com, char ***env)
 {
 	int i;
+	int j;
+	int k;
 
 	i = -1;
-	(void)env;
-	while (com && (*com)[++i])
+	j = -1;
+	k = 0;
+	while (com && com[++i])
 	{
-		if (com[i + 1])
+		if (ft_strstr(com[i], "$"))
+		{
+			while (com[i][++j] && com[i][j] != '$')
+				ft_putchar(com[i][j]);
+			k = search_env(env, com[i] + j + 1, ft_strlen(com[i] + j + 1));
+			if ((*env)[k])
+				ft_printf("%s", (*env)[k] + ft_strlen(com[i]) - j);
+			if (!com[i + 1])
+				ft_printf("\n");
+		}
+		else if (com[i + 1] && !ft_strstr(com[i], "$"))
 			ft_printf("%s ", com[i]);
 		else
 			ft_printf("%s\n", com[i]);
@@ -28,57 +51,36 @@ int				ft_echo(char **com, char ***env)
 	return (0);
 }
 
-static int		ft_cd_error(char **com)
+static void		replace_env(char **str, char ***env, int i)
 {
-	ft_printf("minishell: cd: %s: ", com[1]);
-	write(2, "No such file or directory\n", 26);
-	return (0);
+	ft_strdel(&(*env)[i]);
+	(*env)[i] = *str;
 }
 
-static int		set_dir(char *path, char ***env, int i, int free)
+static int		set_dir(char *path, char ***env, int i, char *old)
 {
 	char	*pwd;
-	int		ret;
+	char	*opwd;
+	int		j;
 
-	pwd = NULL;
-	ret = 0;
+	j = 0;
 	if ((pwd = ft_strjoin("PWD=", path)) == NULL
+		|| (opwd = ft_strjoin("OLDPWD=", old)) == NULL
 		|| chdir(path) == -1)
-		ret = 1;
+		return (1);
 	if ((*env)[i])
-	{
-		ft_strdel(&(*env)[i]);
-		(*env)[i] = pwd;
-	}
+		replace_env(&pwd, env, i);
 	else
 		(*env) = add_env(env, &pwd);
-	if (free)
-		ft_strdel(&path);
-	return (ret);
-}
-
-static char		*manage_dir(char *path, char *name)
-{
-	int i;
-	int j;
-
-	i = -1;
-	j = 0;
-	if (!(ft_strcmp(name, ".")))
-		return (ft_strdup(path));
-	else if (!(ft_strcmp(name, "..")))
-	{
-		while (path[++i])
-		{
-			if (path[i] == '/')
-				j = i;
-		}
-		if (j == 0)
-			return (ft_strdup("/"));
-		else
-			return (ft_strndup(path, j));
-	}
-	return (ft_joinpath(path, name));
+	while ((*env)[j] && ft_strncmp((*env)[j], "OLDPWD", 6))
+		j++;
+	if ((*env)[j])
+		replace_env(&opwd, env, j);
+	else
+		(*env) = add_env(env, &opwd);
+	ft_strdel(&path);
+	ft_strdel(&old);
+	return (0);
 }
 
 int				ft_cd(char **com, char ***env)
@@ -87,22 +89,25 @@ int				ft_cd(char **com, char ***env)
 	char	buff[BUFF_SIZE];
 	char	*path;
 	DIR		*rep;
+	char	*old;
 
-	i = 0;
-	path = NULL;
-	if (!(env) || !(*env) || !(com[0]))
+	if (!(env) || !(*env))
 		return (0);
-	while ((*env)[i] && ft_strncmp((*env)[i], "PWD", 3))
-		i++;
+	if (com[0] && com[1])
+		return (error_many_arguments("cd"));
+	i = search_env(env, "PWD", 3);
 	if (getcwd(buff, BUFF_SIZE) == NULL
-			|| (path = manage_dir(buff, com[1])) == NULL)
+		|| (path = manage_dir(buff, com[0], &com, env)) == NULL)
 		return (1);
+	if (!ft_strcmp(path, "./"))
+		return (0);
 	if ((rep = opendir(path)) == NULL)
 		ft_strdel(&path);
-	if (!(rep) && (rep = opendir(com[1])) == NULL)
+	if (!(rep) && (rep = opendir(com[0])) == NULL)
 		return (ft_cd_error(com));
-	if (rep && closedir(rep) == -1)
+	if ((!(path) && !(path = ft_strdup(com[0])))
+		|| (rep && closedir(rep) == -1)
+		|| (!(old = ((*env)[i] ? ft_strdup((*env)[i] + 4) : ft_strdup(buff)))))
 		return (1);
-	return (path ? set_dir(path, env, i, 1) :
-				set_dir(buff, env, i, 0));
+	return (set_dir(path, env, i, old));
 }

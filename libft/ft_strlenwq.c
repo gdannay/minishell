@@ -1,31 +1,31 @@
 /* ************************************************************************** */
 /*                                                                            */
 /*                                                        :::      ::::::::   */
-/*   ft_dstrdup.c                                       :+:      :+:    :+:   */
+/*   ft_strlen.c                                        :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
 /*   By: gdannay <marvin@42.fr>                     +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
-/*   Created: 2018/01/07 11:59:17 by gdannay           #+#    #+#             */
-/*   Updated: 2018/01/11 15:58:57 by gdannay          ###   ########.fr       */
+/*   Created: 2017/11/09 21:39:57 by gdannay           #+#    #+#             */
+/*   Updated: 2018/01/11 14:20:26 by gdannay          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
-#include "libft.h"
+#include <string.h>
 
-char	**ft_dstrdup(char **str)
+size_t	ft_strlenwq(char *s, char quote)
 {
-	int		i;
-	char	**cpy;
+	size_t	i;
+	size_t	size;
 
 	i = 0;
-	cpy = NULL;
-	while (str && str[i])
+	size = 0;
+	if (s == NULL)
+		return (0);
+	while (s[i] != '\0')
+	{
+		if (s[i] != quote && (s[i] != '\\' || (s[i + 1] && s[i + 1] == '\\')))
+			size++;
 		i++;
-	if ((cpy = (char **)malloc(sizeof(char *) * (i + 1))) == NULL)
-		return (NULL);
-	cpy[i] = 0;
-	i = -1;
-	while (str && str[++i])
-		cpy[i] = ft_strdup(str[i]);
-	return (cpy);
+	}
+	return (size);
 }

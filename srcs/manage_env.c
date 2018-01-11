@@ -6,7 +6,7 @@
 /*   By: gdannay <marvin@42.fr>                     +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2018/01/07 16:06:30 by gdannay           #+#    #+#             */
-/*   Updated: 2018/01/08 15:26:33 by gdannay          ###   ########.fr       */
+/*   Updated: 2018/01/11 19:30:47 by gdannay          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -22,37 +22,45 @@ char			**add_env(char ***env, char **add)
 		i++;
 	if ((new = (char **)malloc(sizeof(char *) * (i + 2))) == NULL)
 		return (NULL);
-	i = -1;
-	while (env && (*env) && (*env)[++i])
+	i = 0;
+	while (env && (*env) && (*env)[i])
 	{
 		new[i] = ft_strdup((*env)[i]);
 		ft_strdel(&(*env)[i]);
+		i++;
 	}
-	free(*env);
+	if (*env)
+		free(*env);
 	new[i] = *add;
 	new[i + 1] = 0;
 	return (new);
 }
 
-int				ft_setenv(char **com, char ***env)
+int				ft_setenv(char **com, char ***ev)
 {
 	int		i;
 	char	*new;
 
 	i = 0;
 	if (!(com[0]))
-		return (ft_env(com, env));
-	while (env && (*env) && (*env)[i]
-			&& ft_strncmp(com[0], (*env)[i], ft_strlen(com[0])))
+		return (ft_env(com, ev));
+	while (com[0][i] && (ft_isdigit(com[0][i]) || ft_isalpha(com[0][i])))
+		i++;
+	if (com[0][i])
+		return (error_alphanum());
+	if (com[0] && com[1] && com[2])
+		return (error_many_arguments("setenv"));
+	i = 0;
+	while ((*ev) && (*ev)[i] && ft_strncmp(com[0], (*ev)[i], ft_strlen(com[0])))
 		i++;
 	if ((new = ft_joinwchar(com[0], com[1], '=')) == NULL)
 		return (1);
-	if (env && (*env) && (*env)[i])
+	if (ev && (*ev) && (*ev)[i])
 	{
-		ft_strdel(&(*env)[i]);
-		(*env)[i] = new;
+		ft_strdel(&(*ev)[i]);
+		(*ev)[i] = new;
 	}
-	else if ((*env = add_env(env, &new)) == NULL)
+	else if ((*ev = add_env(ev, &new)) == NULL)
 		return (1);
 	return (0);
 }

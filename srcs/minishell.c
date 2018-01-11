@@ -6,13 +6,13 @@
 /*   By: gdannay <marvin@42.fr>                     +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2018/01/05 13:29:13 by gdannay           #+#    #+#             */
-/*   Updated: 2018/01/08 14:54:30 by gdannay          ###   ########.fr       */
+/*   Updated: 2018/01/11 20:21:48 by gdannay          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "minishell.h"
 
-void		free_env(char ***env)
+void			free_env(char ***env)
 {
 	int i;
 
@@ -26,45 +26,96 @@ void		free_env(char ***env)
 	}
 }
 
-static int	loop(char **input, int *exit, char ***env)
+static char		**new_com(char *first, char *second)
 {
-	char **com;
+	char	**com;
 
-	com = NULL;
-	if ((com = ft_strsplit(*input, ' ')) == NULL)
+	if ((com = (char **)malloc(sizeof(char *) * 3)) == NULL
+			|| !(com[0] = ft_strdup(first))
+			|| !(com[1] = ft_strdup(second)))
+		return (NULL);
+	com[2] = 0;
+	return (com);
+}
+
+static int		add_shlvl(char ***env)
+{
+	int		i;
+	char	*value;
+	char	**com;
+
+	i = 0;
+	while ((*env) && (*env)[i] && ft_strncmp((*env)[i], "PWD", 3))
+		i++;
+	if (!(*env)[i] && (com = new_com("cd", ".")) && !exec_com(com, env))
+		free_env(&com);
+	i = 0;
+	while ((*env) && (*env)[i] && ft_strncmp((*env)[i], "SHLVL", 5))
+		i++;
+	if ((*env) && (*env)[i])
+		value = ft_itoa(ft_atoi((*env)[i] + 6) + 1);
+	else
+		value = ft_strdup("1");
+	if (!value || (com = new_com("SHLVL", value)) == NULL
+		|| ft_setenv(com, env))
 		return (1);
-	if (input && *input && !(ft_strcmp(*input, "exit")))
-		*exit = 0;
-	else if (input && *input && exec_com(com, env))
-		return (1);
-	if (*exit)
-		ft_printf("$> ");
-	ft_strdel(input);
+	ft_strdel(&value);
 	free_env(&com);
 	return (0);
 }
 
-int			main(int ac, char **av, char **env)
+static int		loop(char **input, int *exit, char ***env)
+{
+	char		**com;
+	static char	*tmp = NULL;
+	static char	open = 0;
+	int			ret;
+
+	ret = 0;
+	if ((ret = echap(&tmp, input, &open)) != 0)
+		return (ret);
+	if ((com = ft_strsplitspace(tmp)) == NULL)
+		return (1);
+	if (!(ft_strncmp(com[0], "exit", 4)) && com[1] && com[2])
+		write(2, "exit: too many arguments\n", 25);
+	else if (!(ft_strncmp(com[0], "exit", 4)))
+		*exit = 0;
+	else if (tmp && exec_com(com, env))
+		return (1);
+	if (*exit)
+		ft_printf("$> ");
+	if (!(*exit) && com[1])
+		ret = ft_atoi(com[1]);
+	ft_strdel(&tmp);
+	free_env(&com);
+	return (ret);
+}
+
+int				main(int ac, char **av, char **env)
 {
 	int		exit;
 	char	**cpy;
 	char	*input;
+	int		ret;
 
 	(void)ac;
 	(void)av;
+	cpy = NULL;
 	input = NULL;
-	if ((cpy = ft_dstrdup(env)) == NULL)
+	ret = 0;
+	if (((cpy = ft_dstrdup(env)) == NULL
+				|| add_shlvl(&cpy)))
 		return (1);
 	exit = 1;
 	ft_printf("$> ");
 	while (exit && get_next_line(0, &input))
 	{
-		if (loop(&input, &exit, &cpy))
+		ret = loop(&input, &exit, &cpy);
+		if (ret == 1 && exit)
 			return (1);
 	}
 	ft_strdel(&input);
-//	free_env(&cpy);
-	if (exit)
-		ft_printf("exit\n");
-	return (0);
+	free_env(&cpy);
+	ft_printf("exit\n");
+	return (ret);
 }

@@ -1,31 +1,41 @@
 /* ************************************************************************** */
 /*                                                                            */
 /*                                                        :::      ::::::::   */
-/*   ft_dstrdup.c                                       :+:      :+:    :+:   */
+/*   ft_strdup.c                                        :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
 /*   By: gdannay <marvin@42.fr>                     +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
-/*   Created: 2018/01/07 11:59:17 by gdannay           #+#    #+#             */
-/*   Updated: 2018/01/11 15:58:57 by gdannay          ###   ########.fr       */
+/*   Created: 2017/11/09 21:40:08 by gdannay           #+#    #+#             */
+/*   Updated: 2018/01/11 16:46:57 by gdannay          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
+#include <string.h>
+#include <stdlib.h>
 #include "libft.h"
 
-char	**ft_dstrdup(char **str)
+char	*ft_strdupwq(char *s, char quote)
 {
 	int		i;
-	char	**cpy;
+	int		j;
+	char	*new;
 
 	i = 0;
-	cpy = NULL;
-	while (str && str[i])
-		i++;
-	if ((cpy = (char **)malloc(sizeof(char *) * (i + 1))) == NULL)
+	j = -1;
+	if (s == NULL)
 		return (NULL);
-	cpy[i] = 0;
-	i = -1;
-	while (str && str[++i])
-		cpy[i] = ft_strdup(str[i]);
-	return (cpy);
+	if (quote < 0)
+		quote *= -1;
+	i = ft_strlenwq(s, quote);
+	if ((new = (char *)malloc(sizeof(char) * (i + 1))) == NULL)
+		return (NULL);
+	i = 0;
+	while (s[i] != '\0')
+	{
+		if (s[i] != quote && (s[i] != '\\' || (s[i + 1] && s[i + 1] == '\\')))
+			new[++j] = s[i];
+		i++;
+	}
+	new[j + 1] = '\0';
+	return (new);
 }

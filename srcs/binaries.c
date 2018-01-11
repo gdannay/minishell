@@ -6,20 +6,13 @@
 /*   By: gdannay <marvin@42.fr>                     +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2018/01/08 10:03:52 by gdannay           #+#    #+#             */
-/*   Updated: 2018/01/08 16:36:16 by gdannay          ###   ########.fr       */
+/*   Updated: 2018/01/11 19:06:08 by gdannay          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "minishell.h"
 
-static int	error_mes(char *str)
-{
-	write(2, "minishell: command not found: ", 30);
-	ft_printf("%s\n", str);
-	return (0);
-}
-
-static int	exec(char **com, char **env, char **command)
+static int		exec(char **com, char **env, char **command)
 {
 	pid_t	father;
 	int		status;
@@ -34,7 +27,7 @@ static int	exec(char **com, char **env, char **command)
 	return (0);
 }
 
-static int	parse_path(char **com, char **env, char *path)
+static int		parse_path(char **com, char **env, char *path)
 {
 	DIR				*rep;
 	struct dirent	*fichier;
@@ -42,7 +35,6 @@ static int	parse_path(char **com, char **env, char *path)
 
 	if ((rep = opendir(path)))
 	{
-//		dprintf(1, "TESt =%s %s\n", path, com[0]);
 		fichier = readdir(rep);
 		while (fichier && ft_strcmp(fichier->d_name, com[0]))
 			fichier = readdir(rep);
@@ -78,7 +70,7 @@ static char		**failcom(char **com, char *exec)
 	return (newcom);
 }
 
-static int	exec_file(char **com, char **env)
+static int		exec_file(char **com, char **env)
 {
 	char	*path;
 	char	*exec;
@@ -96,7 +88,7 @@ static int	exec_file(char **com, char **env)
 	return (0);
 }
 
-int			search_bina(char **com, char ***env)
+int				search_bina(char **com, char ***env)
 {
 	int		i;
 	char	**path;
