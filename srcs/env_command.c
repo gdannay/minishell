@@ -6,7 +6,7 @@
 /*   By: gdannay <marvin@42.fr>                     +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2018/01/07 17:02:27 by gdannay           #+#    #+#             */
-/*   Updated: 2018/01/11 19:13:10 by gdannay          ###   ########.fr       */
+/*   Updated: 2018/01/17 11:30:09 by gdannay          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -116,7 +116,7 @@ int				ft_env(char **com, char ***env)
 	}
 	else
 	{
-		if ((cpy = ft_dstrdup(*env)) == NULL)
+		if ((cpy = ft_tabdup(*env)) == NULL)
 			return (1);
 		if (exec_env(com, &cpy))
 			return (1);

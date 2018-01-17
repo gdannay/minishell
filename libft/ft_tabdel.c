@@ -1,25 +1,27 @@
 /* ************************************************************************** */
 /*                                                                            */
 /*                                                        :::      ::::::::   */
-/*   ft_strlen.c                                        :+:      :+:    :+:   */
+/*   ft_tabdel.c                                        :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
 /*   By: gdannay <marvin@42.fr>                     +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
-/*   Created: 2017/11/09 21:39:57 by gdannay           #+#    #+#             */
-/*   Updated: 2018/01/11 11:26:23 by gdannay          ###   ########.fr       */
+/*   Created: 2018/01/17 10:49:08 by gdannay           #+#    #+#             */
+/*   Updated: 2018/01/17 10:50:12 by gdannay          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
-#include <string.h>
+#include "libft.h"
 
-size_t	ft_dstrlen(char **s)
+void	ft_tabdel(char ***tab)
 {
-	size_t	i;
+	int i;
 
-	i = 0;
-	if (s == NULL)
-		return (0);
-	while (s[i])
-		i++;
-	return (i);
+	i = -1;
+	if (tab && *tab)
+	{
+		while ((*tab)[++i])
+			ft_strdel(&(*tab)[i]);
+		free(*tab);
+		*tab = NULL;
+	}
 }

@@ -6,7 +6,7 @@
 #    By: gdannay <marvin@42.fr>                     +#+  +:+       +#+         #
 #                                                 +#+#+#+#+#+   +#+            #
 #    Created: 2017/11/07 18:54:36 by gdannay           #+#    #+#              #
-#    Updated: 2018/01/11 14:47:32 by gdannay          ###   ########.fr        #
+#    Updated: 2018/01/17 10:50:42 by gdannay          ###   ########.fr        #
 #                                                                              #
 # **************************************************************************** #
 
@@ -96,16 +96,18 @@ SRCS	=		ft_memset.c			\
 				display_uni.c		\
 				display_wstr.c		\
 				ft_joinpath.c		\
-				ft_dstrdup.c		\
+				ft_tabdup.c			\
 				get_next_line.c		\
 				ft_joinwchar.c		\
 				ft_strsplitspace.c	\
-				ft_dstrjoin.c		\
-				ft_dstrlen.c		\
+				ft_tabjoin.c		\
+				ft_tablen.c			\
 				ft_strjoinwq.c		\
 				ft_strlenwq.c		\
 				ft_strdupwq.c		\
-				ft_strndupwq.c
+				ft_strndupwq.c		\
+				ft_atol.c			\
+				ft_tabdel.c
 
 CC		=		gcc
 

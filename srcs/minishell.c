@@ -6,7 +6,7 @@
 /*   By: gdannay <marvin@42.fr>                     +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2018/01/05 13:29:13 by gdannay           #+#    #+#             */
-/*   Updated: 2018/01/11 20:21:48 by gdannay          ###   ########.fr       */
+/*   Updated: 2018/01/17 11:29:42 by gdannay          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -103,7 +103,7 @@ int				main(int ac, char **av, char **env)
 	cpy = NULL;
 	input = NULL;
 	ret = 0;
-	if (((cpy = ft_dstrdup(env)) == NULL
+	if (((cpy = ft_tabdup(env)) == NULL
 				|| add_shlvl(&cpy)))
 		return (1);
 	exit = 1;
