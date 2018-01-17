@@ -6,7 +6,7 @@
 /*   By: gdannay <marvin@42.fr>                     +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2018/01/05 13:29:13 by gdannay           #+#    #+#             */
-/*   Updated: 2018/01/17 11:29:42 by gdannay          ###   ########.fr       */
+/*   Updated: 2018/01/17 13:52:31 by gdannay          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -117,5 +117,6 @@ int				main(int ac, char **av, char **env)
 	ft_strdel(&input);
 	free_env(&cpy);
 	ft_printf("exit\n");
+	while(1);
 	return (ret);
 }

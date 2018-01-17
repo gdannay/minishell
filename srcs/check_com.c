@@ -6,7 +6,7 @@
 /*   By: gdannay <marvin@42.fr>                     +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2018/01/07 12:40:06 by gdannay           #+#    #+#             */
-/*   Updated: 2018/01/11 16:18:16 by gdannay          ###   ########.fr       */
+/*   Updated: 2018/01/17 15:24:20 by gdannay          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -34,6 +34,5 @@ int		exec_com(char **com, char ***env)
 		ret = g_mini_command[i].com(com + 1, env);
 	else if (com[0])
 		ret = search_bina(com, env);
-	i = -1;
 	return (ret);
 }

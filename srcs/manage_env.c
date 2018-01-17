@@ -6,7 +6,7 @@
 /*   By: gdannay <marvin@42.fr>                     +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2018/01/07 16:06:30 by gdannay           #+#    #+#             */
-/*   Updated: 2018/01/11 19:30:47 by gdannay          ###   ########.fr       */
+/*   Updated: 2018/01/17 16:03:16 by gdannay          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -48,19 +48,19 @@ int				ft_setenv(char **com, char ***ev)
 		i++;
 	if (com[0][i])
 		return (error_alphanum());
-	if (com[0] && com[1] && com[2])
+	if (com[0] && com[1] && com[2] && com[3])
 		return (error_many_arguments("setenv"));
-	i = 0;
-	while ((*ev) && (*ev)[i] && ft_strncmp(com[0], (*ev)[i], ft_strlen(com[0])))
-		i++;
+	i = search_env(ev, com[0], ft_strlen(com[0]));
 	if ((new = ft_joinwchar(com[0], com[1], '=')) == NULL)
 		return (1);
-	if (ev && (*ev) && (*ev)[i])
+	if (ev && (*ev) && (*ev)[i] && com[0] && com[1] && com[2] && com[2][0] == '0')
+		ft_strdel(&new);
+	else if (ev && (*ev) && (*ev)[i])
 	{
 		ft_strdel(&(*ev)[i]);
 		(*ev)[i] = new;
 	}
-	else if ((*ev = add_env(ev, &new)) == NULL)
+	else if (ev && (*ev = add_env(ev, &new)) == NULL)
 		return (1);
 	return (0);
 }

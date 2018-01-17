@@ -6,7 +6,7 @@
 /*   By: gdannay <marvin@42.fr>                     +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2018/01/07 13:06:37 by gdannay           #+#    #+#             */
-/*   Updated: 2018/01/17 13:47:08 by gdannay          ###   ########.fr       */
+/*   Updated: 2018/01/17 15:55:00 by gdannay          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -17,6 +17,8 @@ int				search_env(char ***env, char *var, size_t length)
 	int	i;
 
 	i = 0;
+	if (!env || !(*env))
+		return (0);
 	while ((*env)[i] && ft_strncmp((*env)[i], var, length))
 		i++;
 	return (i);
@@ -91,8 +93,8 @@ int				ft_cd(char **com, char ***env)
 		return (0);
 	if (com[0] && com[1])
 		return (error_many_arguments("cd"));
-	if (com[0][0] == '~' && !(home = get_home(com[0], env)))
-		return (1);
+	if ((!com[0] || com[0][0] == '~') && !(home = get_home(com[0], env)))
+		return (0);
 	if (getcwd(old, BUFF_SIZE) == NULL)
 		return (1);
 	if (home && chdir(home) == -1)

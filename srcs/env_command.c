@@ -6,20 +6,19 @@
 /*   By: gdannay <marvin@42.fr>                     +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2018/01/07 17:02:27 by gdannay           #+#    #+#             */
-/*   Updated: 2018/01/17 11:40:33 by gdannay          ###   ########.fr       */
+/*   Updated: 2018/01/17 15:46:13 by gdannay          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "minishell.h"
 
-static int		flag_error(char c, char ***env, char ***com, int i)
+static int		flag_error(char c)
 {
-	free_env(env);
-	ft_printf("env: illegal option -- %c\n", c);
-	write(2, "usage: env [-i] [-u name] [name=value ...]", 42);
+	write(2, "env: illegal option -- ", 23);
+	write(2, &c, 1);
+	write(2, "\nusage: env [-i] [-u name] [name=value ...]", 43);
 	write(2, " [utility [argument...]]\n", 25);
-	(*com) = *(com + i);
-	return (0);
+	return (2);
 }
 
 static int		check_flag(char **com, char ***env, int *i)
@@ -29,6 +28,8 @@ static int		check_flag(char **com, char ***env, int *i)
 
 	j = 0;
 	ret = 0;
+	if (!(com[*i][1]))
+		return (flag_error(com[*i][1]));
 	while (com[*i][++j])
 	{
 		if (com[*i][j] == 'u' && com[*i + 1]
@@ -41,8 +42,8 @@ static int		check_flag(char **com, char ***env, int *i)
 			return (1);
 		else if (com[*i][j] == 'i')
 			free_env(env);
-		else if (!(com[*i + 1]))
-			return (flag_error(com[*i][j], env, &com, *i));
+		else
+			return (flag_error(com[*i][j]));
 	}
 	return (0);
 }
@@ -52,12 +53,7 @@ static int		emergency_path(char ***env)
 	int		i;
 	char	**emergency;
 
-	i = 0;
-	if (env && (*env))
-	{
-		while ((*env)[i] && ft_strncmp("PATH", (*env)[i], 4))
-			i++;
-	}
+	i = search_env(env, "PATH", 4);
 	if (!(*env) || !((*env)[i]))
 	{
 		if ((emergency = (char **)malloc(sizeof(char *) * 3)) == NULL)
@@ -70,7 +66,7 @@ static int		emergency_path(char ***env)
 			free_env(&emergency);
 			return (1);
 		}
-		free_env(&emergency);
+		ft_tabdel(&emergency);
 	}
 	return (0);
 }
@@ -81,13 +77,14 @@ static int		exec_env(char **com, char ***env)
 	char	**new;
 	int		ret;
 
-	i = -1;
+	i = 0;
 	ret = 0;
-	while (com[++i] && com[i][0] == '-')
-	{
-		if (check_flag(com, env, &i))
-			return (1);
-	}
+	while (com[i] && com[i][0] == '-' && !(ret = check_flag(com, env, &i)))
+		i++;
+	if (ret == 1)
+		return (1);
+	else if (ret == 2)
+		return (0);
 	i--;
 	while (ft_strstr(com[++i], "=")
 			&& (new = ft_strsplit(com[i], '='))
@@ -99,7 +96,6 @@ static int		exec_env(char **com, char ***env)
 		return (1);
 	if (com[i] && (exec_com(com + i, env)))
 		return (1);
-	free_env(env);
 	return (0);
 }
 
@@ -120,6 +116,7 @@ int				ft_env(char **com, char ***env)
 			return (1);
 		if (exec_env(com, &cpy))
 			return (1);
+		free_env(&cpy);
 	}
 	return (0);
 }
