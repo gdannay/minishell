@@ -6,7 +6,7 @@
 /*   By: gdannay <marvin@42.fr>                     +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2018/01/05 13:46:50 by gdannay           #+#    #+#             */
-/*   Updated: 2018/01/11 20:38:56 by gdannay          ###   ########.fr       */
+/*   Updated: 2018/01/17 13:45:29 by gdannay          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -41,7 +41,7 @@ int					error_mes(char *str);
 int					error_alphanum(void);
 int					error_many_arguments(char *str);
 int					ft_cd_error(char **com);
-char				*manage_dir(char *path, char *name,
-					char ***com, char ***env);
+char				*get_home(char *path, char ***env);
+int					search_env(char ***env, char *var, size_t length);
 
 #endif

@@ -6,13 +6,13 @@
 /*   By: gdannay <marvin@42.fr>                     +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2018/01/07 13:06:37 by gdannay           #+#    #+#             */
-/*   Updated: 2018/01/11 20:30:59 by gdannay          ###   ########.fr       */
+/*   Updated: 2018/01/17 13:47:08 by gdannay          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "minishell.h"
 
-static int		search_env(char ***env, char *var, size_t length)
+int				search_env(char ***env, char *var, size_t length)
 {
 	int	i;
 
@@ -57,57 +57,53 @@ static void		replace_env(char **str, char ***env, int i)
 	(*env)[i] = *str;
 }
 
-static int		set_dir(char *path, char ***env, int i, char *old)
+static int		set_dir(char *new, char ***env, char *old)
 {
 	char	*pwd;
 	char	*opwd;
 	int		j;
+	int		i;
 
-	j = 0;
-	if ((pwd = ft_strjoin("PWD=", path)) == NULL
-		|| (opwd = ft_strjoin("OLDPWD=", old)) == NULL
-		|| chdir(path) == -1)
+	j = search_env(env, "OLDPWD", 6);
+	i = search_env(env, "PWD", 3);
+	if ((pwd = ft_strjoin("PWD=", new)) == NULL
+		|| (opwd = ft_strjoin("OLDPWD=", old)) == NULL)
 		return (1);
 	if ((*env)[i])
 		replace_env(&pwd, env, i);
 	else
 		(*env) = add_env(env, &pwd);
-	while ((*env)[j] && ft_strncmp((*env)[j], "OLDPWD", 6))
-		j++;
 	if ((*env)[j])
 		replace_env(&opwd, env, j);
 	else
 		(*env) = add_env(env, &opwd);
-	ft_strdel(&path);
-	ft_strdel(&old);
 	return (0);
 }
 
 int				ft_cd(char **com, char ***env)
 {
-	int		i;
-	char	buff[BUFF_SIZE];
-	char	*path;
-	DIR		*rep;
-	char	*old;
+	char	old[BUFF_SIZE];
+	char	new[BUFF_SIZE];
+	char	*home;
 
+	home = NULL;
 	if (!(env) || !(*env))
 		return (0);
 	if (com[0] && com[1])
 		return (error_many_arguments("cd"));
-	i = search_env(env, "PWD", 3);
-	if (getcwd(buff, BUFF_SIZE) == NULL
-		|| (path = manage_dir(buff, com[0], &com, env)) == NULL)
+	if (com[0][0] == '~' && !(home = get_home(com[0], env)))
 		return (1);
-	if (!ft_strcmp(path, "./"))
-		return (0);
-	if ((rep = opendir(path)) == NULL)
-		ft_strdel(&path);
-	if (!(rep) && (rep = opendir(com[0])) == NULL)
+	if (getcwd(old, BUFF_SIZE) == NULL)
+		return (1);
+	if (home && chdir(home) == -1)
+	{
+		ft_strdel(&home);
 		return (ft_cd_error(com));
-	if ((!(path) && !(path = ft_strdup(com[0])))
-		|| (rep && closedir(rep) == -1)
-		|| (!(old = ((*env)[i] ? ft_strdup((*env)[i] + 4) : ft_strdup(buff)))))
+	}
+	else if (!home && chdir(com[0]) == -1)
+		return (ft_cd_error(com));
+	if (getcwd(new, BUFF_SIZE) == NULL)
 		return (1);
-	return (set_dir(path, env, i, old));
+	ft_strdel(&home);
+	return (set_dir(new, env, old));
 }
