@@ -6,7 +6,7 @@
 /*   By: gdannay <marvin@42.fr>                     +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2018/01/07 13:06:37 by gdannay           #+#    #+#             */
-/*   Updated: 2018/01/17 15:55:00 by gdannay          ###   ########.fr       */
+/*   Updated: 2018/01/17 16:58:23 by gdannay          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -42,14 +42,13 @@ int				ft_echo(char **com, char ***env)
 			k = search_env(env, com[i] + j + 1, ft_strlen(com[i] + j + 1));
 			if ((*env)[k])
 				ft_printf("%s", (*env)[k] + ft_strlen(com[i]) - j);
-			if (!com[i + 1])
-				ft_printf("\n");
 		}
 		else if (com[i + 1] && !ft_strstr(com[i], "$"))
 			ft_printf("%s ", com[i]);
 		else
-			ft_printf("%s\n", com[i]);
+			ft_printf("%s", com[i]);
 	}
+	ft_printf("\n");
 	return (0);
 }
 
@@ -93,7 +92,7 @@ int				ft_cd(char **com, char ***env)
 		return (0);
 	if (com[0] && com[1])
 		return (error_many_arguments("cd"));
-	if ((!com[0] || com[0][0] == '~') && !(home = get_home(com[0], env)))
+	if ((!com[0] && !(home = get_home(com[0], env))))
 		return (0);
 	if (getcwd(old, BUFF_SIZE) == NULL)
 		return (1);

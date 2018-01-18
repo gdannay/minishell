@@ -6,7 +6,7 @@
 /*   By: gdannay <marvin@42.fr>                     +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2018/01/05 13:29:13 by gdannay           #+#    #+#             */
-/*   Updated: 2018/01/17 13:52:31 by gdannay          ###   ########.fr       */
+/*   Updated: 2018/01/17 17:02:17 by gdannay          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -74,7 +74,8 @@ static int		loop(char **input, int *exit, char ***env)
 	ret = 0;
 	if ((ret = echap(&tmp, input, &open)) != 0)
 		return (ret);
-	if ((com = ft_strsplitspace(tmp)) == NULL)
+	if ((com = ft_strsplitspace(tmp)) == NULL
+		|| !(com = manage_home(com, env)))
 		return (1);
 	if (!(ft_strncmp(com[0], "exit", 4)) && com[1] && com[2])
 		write(2, "exit: too many arguments\n", 25);
@@ -117,6 +118,5 @@ int				main(int ac, char **av, char **env)
 	ft_strdel(&input);
 	free_env(&cpy);
 	ft_printf("exit\n");
-	while(1);
 	return (ret);
 }

@@ -6,7 +6,7 @@
 /*   By: gdannay <marvin@42.fr>                     +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2018/01/07 16:06:30 by gdannay           #+#    #+#             */
-/*   Updated: 2018/01/17 16:03:16 by gdannay          ###   ########.fr       */
+/*   Updated: 2018/01/17 16:48:37 by gdannay          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -53,7 +53,7 @@ int				ft_setenv(char **com, char ***ev)
 	i = search_env(ev, com[0], ft_strlen(com[0]));
 	if ((new = ft_joinwchar(com[0], com[1], '=')) == NULL)
 		return (1);
-	if (ev && (*ev) && (*ev)[i] && com[0] && com[1] && com[2] && com[2][0] == '0')
+	if (*ev && (*ev)[i] && com[0] && com[1] && com[2] && com[2][0] == '0')
 		ft_strdel(&new);
 	else if (ev && (*ev) && (*ev)[i])
 	{

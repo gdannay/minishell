@@ -6,7 +6,7 @@
 /*   By: gdannay <marvin@42.fr>                     +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2017/12/15 15:18:48 by gdannay           #+#    #+#             */
-/*   Updated: 2018/01/17 15:52:47 by gdannay          ###   ########.fr       */
+/*   Updated: 2018/01/17 16:49:21 by gdannay          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -68,4 +68,22 @@ char			*get_home(char *path, char ***env)
 		return (ft_strdup((*env)[i] + 5));
 	else
 		return (ft_strjoin((*env)[i] + 5, path + 1));
+}
+
+char			**manage_home(char **com, char ***env)
+{
+	int		i;
+	char	*new;
+
+	i = -1;
+	new = NULL;
+	while (com[++i])
+	{
+		if (com[i][0] == '~' && (new = get_home(com[i], env)))
+		{
+			ft_strdel(&(com)[i]);
+			com[i] = new;
+		}
+	}
+	return (com);
 }
