@@ -55,9 +55,7 @@ char			*manage_path(char *str, char **rest)
 char			*get_home(char *path, char ***env)
 {
 	int		i;
-	int		j;
 
-	j = 0;
 	i = search_env(env, "HOME", 4);
 	if (!(*env) || !(*env)[i])
 	{
